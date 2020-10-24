@@ -19,7 +19,17 @@ def get_fact():
 
 @app.route('/')
 def home():
-    return "FILL ME!"
+    fact = get_fact()
+    pig_url = 'https://hidden-journey-62459.herokuapp.com'
+    data = {'input_text': fact}
+    response = requests.post(f'{pig_url}/piglatinize/',
+                             data,
+                             allow_redirects=False)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    result = soup.find_all('a')[0].getText()
+    result_url = f'{pig_url}{result}'
+    clickable = f'<a href="{result_url}">{result_url}</a>'
+    return clickable
 
 
 if __name__ == "__main__":
